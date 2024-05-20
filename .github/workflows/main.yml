@@ -47,12 +47,6 @@ jobs:
         shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"LeninCar_SonarCC" /o:"lenincar" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverage.opencover.reportsPaths="./backend-todo/TestResults/coverage.opencover.xml"
-      - name: SonarCloud coverage for backend 
-        uses: sonarsource/sonarcloud-github-action@master
-        with:
-          projectBaseDir: .
-          args: >
-            -Dsonar.cs.opencover.reportsPaths=./backend-todo/TestGestor/TestResults/*/coverage.cobertura.xml
           
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -68,3 +62,11 @@ jobs:
         shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+
+      - name: Run SonarCloud GitHub Action
+        uses: sonarsource/sonarcloud-github-action@master
+        with:
+          projectBaseDir: .
+          args: -Dsonar.cs.opencover.reportsPaths=./backend-todo/TestGestor/TestResults/*/coverage.opencover.xml
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
