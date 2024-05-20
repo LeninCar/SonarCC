@@ -62,11 +62,3 @@ jobs:
         shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-
-      - name: Run SonarCloud GitHub Action
-        uses: sonarsource/sonarcloud-github-action@master
-        with:
-          projectBaseDir: .
-          args: -Dsonar.cs.opencover.reportsPaths=./backend-todo/TestGestor/TestResults/*/coverage.opencover.xml
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
