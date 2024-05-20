@@ -46,7 +46,7 @@ jobs:
       - name: Begin SonarCloud analysis
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"LeninCar_SonarCC" /o:"lenincar" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"  /d:sonar.coverage.exclusions="**/*.Tests/**" /d:sonar.coverage.opencover.reportsPaths="**/TestResults/coverage.opencover.xml"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"LeninCar_SonarCC" /o:"lenincar" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverage.opencover.reportsPaths="./TestResults/coverage.opencover.xml"
       
       - name: Build project
         run: dotnet build ./backend-todo/backend-todo.sln
