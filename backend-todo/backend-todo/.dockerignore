@@ -1,0 +1,20 @@
+# Excluye archivos y directorios sensibles
+app/secrets/
+config/secrets.yaml
+
+# Exclude build artifacts
+bin/
+obj/
+
+# Exclude node_modules directory for Node.js projects
+node_modules/
+
+# Exclude local development files
+.vscode/
+.idea/
+
+# Exclude log files
+*.log
+
+# Exclude environment-specific configuration files
+.env

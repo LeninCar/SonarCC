@@ -1,0 +1,38 @@
+version: "3"
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "3000:3000"
+
+  backend:
+    build:
+      context: ./backend/backend-todo
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8081:8081"
+  # mysqldb:
+  #   image: mysql:5.7
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+  #     MYSQL_DATABASE: ${MYSQL_DATABASE}
+  #     MYSQL_USER: ${MYSQL_USER}
+  #     MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+  #   ports:
+  #     - "3306:3306"
+  #   volumes:
+  #     - mysql-data:/var/lib/mysql
+
+  adminer:
+    image: adminer:4.8.1
+    restart: always
+    ports:
+      - "8080:8080"
+
+volumes:
+   mysql-data:
