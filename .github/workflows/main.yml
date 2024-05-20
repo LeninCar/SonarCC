@@ -42,18 +42,28 @@ jobs:
         run: |
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
-      
+
+      - name: Begin SonarCloud analysis
+        shell: powershell
+        run: |
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"LeninCar_SonarCC" /o:"lenincar" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverage.opencover.reportsPaths="./backend-todo/TestResults/coverage.opencover.xml"
+      - name: SonarCloud coverage for backend 
+        uses: sonarsource/sonarcloud-github-action@master
+        with:
+          projectBaseDir: .
+          args: >
+            -Dsonar.cs.opencover.reportsPaths=./backend-todo/TestGestor/TestResults/*/coverage.cobertura.xml
+          
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          
       - name: Build project
         run: dotnet build ./backend-todo/backend-todo.sln
 
       - name: Run tests with coverage
         working-directory: ./backend-todo
         run: dotnet test ./TestGestor/TestGestor.csproj --collect:"XPlat Code Coverage" /p:CoverletOutput=./TestResults/coverage.opencover.xml /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
-      - name: Begin SonarCloud analysis
-        shell: powershell
-        run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"LeninCar_SonarCC" /o:"lenincar" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverage.opencover.reportsPaths="./backend-todo/TestResults/coverage.opencover.xml"
-      
+
       - name: End SonarCloud analysis
         shell: powershell
         run: |
