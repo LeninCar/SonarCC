@@ -43,6 +43,12 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"LeninCar_SonarCC" /o:"lenincar" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
-          dotnet build ./backend-todo/backend-todo.sln
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+           run: |
+            .\.sonar\scanner\dotnet-sonarscanner begin /k:"LeninCar_SonarCC" /o:"lenincar" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+            dotnet build ./backend-todo/backend-todo.sln
+            dotnet test ./TestGestor/TestGestor.csproj --collect:"XPlat Code Coverage" /p:CoverletOutput=./TestResults/coverage.opencover.xml /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+            .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+        
+            # Publish coverage report to SonarCloud
+            .\.sonar\scanner\dotnet-sonarscanner begin /k:"LeninCar_SonarCC" /o:"lenincar" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+            .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
